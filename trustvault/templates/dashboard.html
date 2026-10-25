@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}{% block body %}
+<div class="pagehead"><div><p class="eyebrow">ADMIN OVERVIEW</p><h1>Dashboard</h1><p class="sub">System-wide view of documents, users and security events.</p></div></div>
+<div class="grid stats">
+<div class="card"><div class="stat-top">Documents uploaded<div class="stat-icon">▤</div></div><div class="stat-num">{{ stats.docs }}</div></div>
+<div class="card"><div class="stat-top">Registered users<div class="stat-icon">☻</div></div><div class="stat-num">{{ stats.users }}</div></div>
+<div class="card"><div class="stat-top">Records shared<div class="stat-icon">⇄</div></div><div class="stat-num">{{ stats.shares }}</div></div>
+<div class="card"><div class="stat-top">Events (24h)<div class="stat-icon">≣</div></div><div class="stat-num">{{ stats.events }}</div></div></div>
+<div class="grid columns">
+<div class="card"><div class="card-head"><h2>Recent activity</h2><a class="btn sm" href="{{ url_for('logs') }}">All logs</a></div><div class="activity">
+{% for r in recent %}<div class="activity-row"><div class="activity-icon">•</div><div><strong>{{ r.actor }} · {{ r.action }}</strong><small>{{ r.ts }} {{ r.target or '' }}</small></div></div>{% else %}<div class="empty">No activity yet.</div>{% endfor %}</div></div>
+<div class="card"><div class="card-head"><h2>Security status</h2>{% if chain_ok %}<span class="badge">HEALTHY</span>{% else %}<span class="badge red">TAMPERING</span>{% endif %}</div>
+<p class="sub">Audit chain: {% if chain_ok %}intact — {{ chain_n }} entries verified.{% else %}<b>BROKEN</b>. Investigate immediately.{% endif %}</p>
+<p class="sub mt">Denied / failed events in last 24h: <b>{{ stats.failed }}</b></p>
+<div class="actions"><a class="btn" href="{{ url_for('users') }}">Manage users</a><a class="btn" href="{{ url_for('logs') }}">Review logs</a></div></div></div>{% endblock %}

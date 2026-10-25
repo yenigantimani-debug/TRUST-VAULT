@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}{{ d.title }}{% endblock %}{% block body %}
+<div class="pagehead"><div><p class="eyebrow">{{ d.category|upper }}</p><h1>{{ d.title }}</h1><p class="sub">{{ d.filename }} · {{ (d.size/1024)|round(1) }} KB · owner <b>{{ d.owner }}</b> · your access: <span class="badge">{{ lvl }}</span></p></div>
+<a class="btn primary" href="{{ url_for('download', doc_id=d.id) }}">Download</a></div>
+<div class="grid columns">
+<div class="card"><h2>Details</h2><p class="sub">{{ d.description or 'No description.' }}</p><p class="sub mt">SHA-256</p><p class="mono">{{ d.sha256 }}</p><p class="sub mt">Uploaded {{ d.created_at }} · updated {{ d.updated_at }}</p>
+{% if lvl in ('admin','owner','edit') %}<h2 class="mt">Edit</h2><form method="post" action="{{ url_for('edit', doc_id=d.id) }}" enctype="multipart/form-data" class="form-stack"><input type="hidden" name="csrf" value="{{ csrf }}">
+<div class="field"><label>Title</label><input name="title" value="{{ d.title }}" required maxlength="150"></div>
+<div class="field"><label>Category</label><select name="category">{% for c in CATEGORIES %}<option {{ 'selected' if c==d.category }}>{{ c }}</option>{% endfor %}</select></div>
+<div class="field"><label>Description</label><textarea name="description" maxlength="1000">{{ d.description }}</textarea></div>
+<div class="field"><label>Replace file (optional)</label><input type="file" name="file"></div>
+<div><button class="btn">Save changes</button></div></form>{% endif %}</div>
+<div class="stack">
+{% if lvl in ('admin','owner') %}
+<div class="card"><h2>Access control</h2>
+<form method="post" action="{{ url_for('share', doc_id=d.id) }}" class="form-stack"><input type="hidden" name="csrf" value="{{ csrf }}">
+<div class="field"><label>Username</label><input name="username" required maxlength="32"></div>
+<div class="field"><label>Permission</label><select name="permission"><option value="read">Read (view &amp; download)</option><option value="edit">Edit (also change metadata / replace file)</option></select></div>
+<div><button class="btn primary">Grant access</button></div></form>
+<h2 class="mt">Shared with</h2>
+{% for s in shares %}<div class="activity-row"><div><strong>{{ s.username }} <span class="badge {{ 'warn' if s.permission=='edit' }}">{{ s.permission }}</span></strong><small>{{ s.role }} · since {{ s.created_at[:10] }}</small></div>
+<form method="post" action="{{ url_for('revoke', doc_id=d.id) }}" class="inline-form"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="user_id" value="{{ s.user_id }}"><button class="btn danger sm">Revoke</button></form></div>
+{% else %}<div class="empty">Not shared with anyone.</div>{% endfor %}</div>
+<div class="card"><h2>Danger zone</h2><form method="post" action="{{ url_for('delete', doc_id=d.id) }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn danger">Delete document permanently</button></form></div>
+{% else %}<div class="card"><h2>Access</h2><p class="sub">Only the owner or an admin can manage sharing.</p></div>{% endif %}</div></div>{% endblock %}

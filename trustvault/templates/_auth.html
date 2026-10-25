@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}{% endblock %} — TrustVault</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body><div class="auth">
+<section class="auth-left"><div class="brand"><div class="mark">◈</div><div>TrustVault<small>SECURE ACCESS</small></div></div>
+<p class="eyebrow">SECURE SHARING · SMARTER ACCESS · VERIFIABLE ACCOUNTABILITY</p>
+<h1>Share confidential files <span>with confidence.</span></h1>
+<p class="sub">Role-based access for admins, owners and viewers. Owners grant and revoke access; every action lands in a tamper-evident audit trail.</p>
+<div class="feature-list"><div class="feature"><i>✓</i>Admin, owner and viewer roles</div><div class="feature"><i>✓</i>Per-document read / edit permissions</div><div class="feature"><i>✓</i>Hash-chained activity log</div></div></section>
+<section class="auth-right"><div class="auth-box">
+{% for cat, m in get_flashed_messages(with_categories=true) %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+{% block form %}{% endblock %}</div></section></div></body></html>

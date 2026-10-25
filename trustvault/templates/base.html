@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}TrustVault{% endblock %} — TrustVault</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand"><div class="mark">◈</div><div>TrustVault<small>SECURE ACCESS</small></div></div>
+  <p class="navlabel">WORKSPACE</p>
+  <nav class="nav">
+    {% if me.role == 'admin' %}<a href="{{ url_for('dashboard') }}" class="{{ 'active' if endpoint=='dashboard' }}"><span>▦</span>Dashboard</a>{% endif %}
+    <a href="{{ url_for('documents') }}" class="{{ 'active' if endpoint=='documents' }}"><span>▤</span>My Documents</a>
+    <a href="{{ url_for('search') }}" class="{{ 'active' if endpoint=='search' }}"><span>⌕</span>Search Documents</a>
+    <a href="{{ url_for('categories') }}" class="{{ 'active' if endpoint=='categories' }}"><span>◫</span>Categories</a>
+    {% if me.role in ('admin','owner') %}<a href="{{ url_for('upload') }}" class="{{ 'active' if endpoint=='upload' }}"><span>⇧</span>Upload Documents</a>{% endif %}
+    {% if me.role == 'admin' %}
+    <a href="{{ url_for('users') }}" class="{{ 'active' if endpoint=='users' }}"><span>☻</span>Users</a>
+    <a href="{{ url_for('logs') }}" class="{{ 'active' if endpoint=='logs' }}"><span>≣</span>Activity Logs</a>{% endif %}
+    <a href="{{ url_for('profile') }}" class="{{ 'active' if endpoint=='profile' }}"><span>⚙</span>Profile</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="dot"></div><div>Vault encrypted in transit<small>Every action is audited</small></div></div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <div class="crumb">TrustVault / <b>{{ self.title() }}</b></div>
+    <div class="top-right"><span class="role">{{ me.role|upper }}</span><div class="avatar">{{ me.username[0]|upper }}</div><span>{{ me.username }}</span>
+      <form method="post" action="{{ url_for('logout') }}" class="inline-form"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn ghost sm">Sign out</button></form></div>
+  </header>
+  <main class="content">
+    {% for cat, m in get_flashed_messages(with_categories=true) %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+    {% block body %}{% endblock %}
+  </main>
+  <footer class="page-footer">TrustVault · role-based access · tamper-evident audit trail</footer>
+</div></div></body></html>

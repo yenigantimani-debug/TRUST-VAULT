@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% from "_doctable.html" import table %}{% block title %}My Documents{% endblock %}{% block body %}
+<div class="pagehead"><div><p class="eyebrow">LIBRARY</p><h1>My Documents</h1><p class="sub">Documents you own, and documents others shared with you.</p></div>
+{% if me.role in ('admin','owner') %}<a class="btn primary" href="{{ url_for('upload') }}">Upload document</a>{% endif %}</div>
+<div class="stack"><div class="card"><h2>Owned by me</h2>{{ table(mine) }}</div>
+<div class="card"><h2>Shared with me</h2>{{ table(shared, true) }}</div></div>{% endblock %}

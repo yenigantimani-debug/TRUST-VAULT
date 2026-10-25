@@ -1,0 +1,6 @@
+{% macro table(rows, show_perm=false) %}
+{% if rows %}<div class="table-wrap"><table class="table"><thead><tr><th>Title</th><th>Category</th><th>Owner</th>{% if show_perm %}<th>Access</th>{% endif %}<th>Size</th><th>Uploaded</th><th></th></tr></thead><tbody>
+{% for d in rows %}<tr><td><span class="file-title">{{ d.title }}</span><span class="file-sub">{{ d.filename }}</span></td><td><span class="badge">{{ d.category }}</span></td><td>{{ d.owner }}</td>
+{% if show_perm %}<td><span class="badge {{ 'warn' if d.permission=='edit' }}">{{ d.permission }}</span></td>{% endif %}
+<td>{{ (d.size/1024)|round(1) }} KB</td><td>{{ d.created_at[:10] }}</td><td><a class="btn sm" href="{{ url_for('document', doc_id=d.id) }}">Open</a></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<div class="empty">Nothing here yet.</div>{% endif %}{% endmacro %}

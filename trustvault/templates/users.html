@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Users{% endblock %}{% block body %}
+<div class="pagehead"><div><p class="eyebrow">ADMIN</p><h1>Manage Users</h1><p class="sub">Change roles or disable accounts. Takes effect immediately.</p></div></div>
+<div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Docs</th><th>Status</th><th></th></tr></thead><tbody>
+{% for u in rows %}<tr><td class="file-title">{{ u.username }}</td><td>{{ u.email }}</td>
+<td>{% if u.id != me.id %}<form method="post" action="{{ url_for('set_role', uid=u.id) }}" class="inline-form"><input type="hidden" name="csrf" value="{{ csrf }}"><div class="field"><select class="compact" name="role">{% for r in ('admin','owner','viewer') %}<option {{ 'selected' if r==u.role }}>{{ r }}</option>{% endfor %}</select></div><button class="btn sm">Set</button></form>{% else %}<span class="badge">{{ u.role }} (you)</span>{% endif %}</td>
+<td>{{ u.docs }}</td><td><span class="badge {{ '' if u.active else 'red' }}">{{ 'active' if u.active else 'disabled' }}</span></td>
+<td>{% if u.id != me.id %}<form method="post" action="{{ url_for('set_active', uid=u.id) }}" class="inline-form"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn sm {{ 'danger' if u.active }}">{{ 'Disable' if u.active else 'Enable' }}</button></form>{% endif %}</td></tr>{% endfor %}</tbody></table></div></div>{% endblock %}

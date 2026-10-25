@@ -1,0 +1,7 @@
+{% extends "_auth.html" %}{% block title %}Sign in{% endblock %}
+{% block form %}<h2>Welcome back</h2><p class="sub">Sign in to your vault.</p>
+<form method="post" autocomplete="on"><input type="hidden" name="csrf" value="{{ csrf }}">
+<div class="field"><label for="u">Username</label><input id="u" name="username" required maxlength="64" autocomplete="username"></div>
+<div class="field"><label for="p">Password</label><input id="p" type="password" name="password" required maxlength="256" autocomplete="current-password"></div>
+<button class="btn primary">Sign in</button></form>
+<p class="auth-bottom">New to TrustVault? <a href="{{ url_for('register') }}">Create an account</a></p>{% endblock %}
