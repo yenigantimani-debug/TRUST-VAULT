@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: trustvault-secure
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /login
+    envVars:
+      - key: TRUSTVAULT_SECRET_KEY
+        sync: false
+      - key: TRUSTVAULT_ENCRYPTION_KEY
+        sync: false
+      - key: TRUSTVAULT_HTTPS
+        value: "1"
