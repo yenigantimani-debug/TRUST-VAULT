@@ -1,0 +1,17 @@
+TrustVault — run the real Flask application
+
+IMPORTANT: Do not open the standalone HTML preview to create an account. Use this Flask app so registration is submitted to the database.
+
+Windows / VS Code:
+1. Extract this ZIP.
+2. Open the folder TrustVault_secure_project\TrustVault_secure in VS Code.
+3. Open Terminal in that folder.
+4. Run: py -m venv .venv
+5. Activate: .venv\Scripts\activate
+6. Install packages: pip install -r requirements.txt
+7. Set the environment variables required by your README (TRUSTVAULT_SECRET_KEY and TRUSTVAULT_ENCRYPTION_KEY). Use secure random values; do not share them.
+8. Run: python app.py
+9. Open the local URL printed in the terminal (usually http://127.0.0.1:5000).
+10. Click Create account in the app. The form will POST to Flask /register and save the account to the project's SQLite database.
+
+The project keeps its existing Flask routes, database, encryption, audit log, and original dark navy/cyan UI. The .venv folder is intentionally excluded; recreate it using the commands above.

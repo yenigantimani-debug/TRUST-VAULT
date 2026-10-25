@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Categories · TrustVault{% endblock %}
+{% block breadcrumb %}Categories{% endblock %}
+{% block content %}
+<div class="pagehead"><div><p class="eyebrow">ORGANIZE YOUR FILES</p><h1>Document Categories</h1><p class="muted">Choose a category to browse documents you’re authorized to access.</p></div>{% if current_user.role in ['admin','owner'] %}<a class="primary buttonlink" href="{{ url_for('upload') }}">＋ Upload Document</a>{% endif %}</div>
+<div class="category-grid">
+{% set descriptions = {'Finance':'Invoices, statements and financial records.','HR':'Employee records, policies and onboarding.','Legal':'Contracts, agreements and legal documents.','IT':'Technical files, project notes and system records.','Education':'Study materials, certificates and learning resources.','Personal':'Private records and important personal files.','General':'Everyday documents and shared resources.','Other':'Documents that do not fit another category.'} %}
+{% for cat in categories %}<a class="card category-card" href="{{ url_for('documents', category=cat) }}"><span class="category-icon">{% if cat == 'Finance' %}₹{% elif cat == 'HR' %}♙{% elif cat == 'Legal' %}⚖{% elif cat == 'IT' %}⌘{% elif cat == 'Education' %}▤{% elif cat == 'Personal' %}◇{% elif cat == 'General' %}▧{% else %}□{% endif %}</span><h2>{{ cat }}</h2><p class="muted">{{ descriptions[cat] }}</p><span class="category-link">View documents →</span></a>{% endfor %}
+</div>
+{% endblock %}

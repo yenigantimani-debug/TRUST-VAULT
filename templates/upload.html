@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Upload · TrustVault{% endblock %}
+{% block content %}
+<div class="pagehead"><div><p class="eyebrow">ADMIN & OWNER</p><h1>Upload document</h1><p class="muted">Attachments are encrypted with AES-256-GCM before being written to disk.</p></div></div>
+<form method="post" enctype="multipart/form-data" class="card formcard">
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+<label>Document title<input name="title" required maxlength="200"></label>
+<label>Category<select name="category" required>{% for cat in categories %}<option>{{ cat }}</option>{% endfor %}</select></label>
+<label>Description<textarea name="description" required rows="4" maxlength="4000"></textarea></label>
+<label>Attachment (optional; max 20 MiB)<input type="file" name="file" accept=".pdf,.txt,.docx,.xlsx,.csv,.png,.jpg,.jpeg"></label>
+<p class="muted small">Allowed types: PDF, TXT, DOCX, XLSX, CSV, PNG, JPG. Metadata remains in SQLite; file bytes are encrypted at rest.</p>
+<button class="primary" type="submit">Encrypt & save</button>
+</form>
+{% endblock %}

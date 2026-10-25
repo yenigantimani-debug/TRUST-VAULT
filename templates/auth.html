@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ "Sign In" if mode == "login" else "Create Account" }} · TrustVault{% endblock %}
+{% block content %}
+<section class="auth-shell">
+  <aside class="auth-intro">
+    <div class="brand"><span class="shield">⬡</span><div><h1>TRUST<span>VAULT</span></h1><p>SECURE DOCUMENTS</p></div></div>
+    <p class="eyebrow">SECURE SHARING · SMARTER ACCESS</p>
+    <h2>Your documents.<br>Your control.</h2>
+    <p class="intro-copy">A secure workspace for storing, sharing, and managing confidential documents with clear permissions and verifiable activity.</p>
+    <div class="auth-points"><div><span class="point-icon">◇</span><div><strong>Protected by design</strong><p>Built for sensitive files and information</p></div></div><div><span class="point-icon">♙</span><div><strong>Role-based access</strong><p>Access tailored to each workspace role</p></div></div></div>
+  </aside>
+  <section class="auth-form-panel">
+    <div class="auth-tabs"><a class="auth-tab {{ 'active' if mode == 'login' else '' }}" href="{{ url_for('login') }}">Sign in</a><a class="auth-tab {{ 'active' if mode == 'register' else '' }}" href="{{ url_for('register') }}">Create account</a></div>
+    <h2>{{ "Welcome back" if mode == "login" else "Create your account" }}</h2>
+    <p class="muted">{{ "Sign in to continue to your secure workspace." if mode == "login" else "Create an account to start using your secure workspace." }}</p>
+    <form method="post" class="auth-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      {% if mode == 'login' %}
+        <label>Username or work email<input name="identity" autocomplete="username" required maxlength="254" placeholder="you@company.com"></label>
+        <label>Password<div class="password-wrap"><input id="login-password" type="password" name="password" autocomplete="current-password" required><button class="show-password" type="button" data-target="login-password">Show</button></div></label>
+        <button class="primary auth-submit" type="submit">Sign in securely <span>→</span></button>
+        <p class="auth-switch">New to TrustVault? <a href="{{ url_for('register') }}">Create an account</a></p>
+      {% else %}
+        <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="50" placeholder="Choose a username"></label>
+        <label>Work email<input type="email" name="email" autocomplete="email" required maxlength="254" placeholder="you@company.com"></label>
+        <label>Password <span class="label-hint">(12+ characters)</span><div class="password-wrap"><input id="register-password" type="password" name="password" autocomplete="new-password" required minlength="12"><button class="show-password" type="button" data-target="register-password">Show</button></div></label>
+        <label>Confirm password<input id="confirm-password" type="password" name="confirm_password" autocomplete="new-password" required minlength="12"></label>
+        <button class="primary auth-submit" type="submit">Create account <span>→</span></button>
+        <p class="muted small">New accounts start with Viewer permissions.</p>
+        <p class="auth-switch">Already registered? <a href="{{ url_for('login') }}">Sign in</a></p>
+      {% endif %}
+    </form>
+    <div class="secure-note"><span>●</span> SECURE ACCESS</div>
+  </section>
+</section>
+<script>
+document.querySelectorAll('.show-password').forEach(function(button){button.addEventListener('click',function(){var field=document.getElementById(button.dataset.target);if(!field)return;var show=field.type==='password';field.type=show?'text':'password';button.textContent=show?'Hide':'Show';});});
+var form=document.querySelector('.auth-form');if(form){form.addEventListener('submit',function(e){var p=document.getElementById('register-password'),c=document.getElementById('confirm-password');if(p&&c&&p.value!==c.value){e.preventDefault();c.setCustomValidity('Passwords do not match.');c.reportValidity();}else if(c){c.setCustomValidity('');}});}
+</script>
+{% endblock %}

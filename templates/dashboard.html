@@ -1,0 +1,87 @@
+{% extends "base.html" %}{% block title %}Dashboard · TrustVault{% endblock %}
+{% block content %}
+<div class="pagehead"><div><p class="eyebrow">YOUR SECURE WORKSPACE</p><h1>Dashboard</h1><p class="muted">Welcome, {{ current_user.username }}.</p></div></div>
+<div class="stats"><div class="card stat"><span>VISIBLE DOCUMENTS</span><strong>{{ docs_count }}</strong></div><div class="card stat"><span>YOUR ROLE</span><strong>{{ current_user.role|title }}</strong></div>{% if users_count is not none %}<div class="card stat"><span>REGISTERED USERS</span><strong>{{ users_count }}</strong></div>{% endif %}</div>
+<div class="card"><h2>Quick actions</h2><div class="actions"><a class="primary buttonlink" href="{{ url_for('documents') }}">Browse documents</a>{% if current_user.role in ['admin', 'owner'] %}<a class="secondary buttonlink" href="{{ url_for('upload') }}">Upload a document</a>{% endif %}{% if current_user.role == 'admin' %}<a class="secondary buttonlink" href="{{ url_for('logs') }}">Review audit logs</a>{% endif %}</div></div>
+{% if current_user.role == 'admin' %}<div class="card"><h2>Recent activity</h2>{% if logs %}<div class="tablewrap"><table><thead><tr><th>Time (UTC)</th><th>User</th><th>Action</th><th>Status</th></tr></thead><tbody>{% for row in logs %}<tr><td>{{ row.created_at }}</td><td>{{ row.username }}</td><td>{{ row.action }}</td><td>{{ row.status }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="muted">No events yet.</p>{% endif %}</div>{% endif %}
+{% endblock %}
+```html
+{% extends "base.html" %}
+{% block title %}Dashboard · TrustVault{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+    <div>
+        <p class="eyebrow">YOUR SECURE WORKSPACE</p>
+        <h1>Dashboard</h1>
+        <p class="muted">Welcome back, {{ current_user.username }}.</p>
+    </div>
+    {% if current_user.role in ['admin', 'owner'] %}
+    <a class="primary buttonlink" href="{{ url_for('upload') }}">+ Upload Document</a>
+    {% endif %}
+</div>
+
+<div class="stats">
+    <div class="card stat">
+        <span>VISIBLE DOCUMENTS</span>
+        <strong>{{ docs_count }}</strong>
+    </div>
+    <div class="card stat">
+        <span>YOUR ROLE</span>
+        <strong>{{ current_user.role|title }}</strong>
+    </div>
+    {% if users_count is not none %}
+    <div class="card stat">
+        <span>REGISTERED USERS</span>
+        <strong>{{ users_count }}</strong>
+    </div>
+    {% endif %}
+    <div class="card stat">
+        <span>SECURITY STATUS</span>
+        <strong>Protected</strong>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+        <a class="primary buttonlink" href="{{ url_for('documents') }}">Browse Documents</a>
+        <a class="secondary buttonlink" href="{{ url_for('categories') }}">View Categories</a>
+        {% if current_user.role == 'admin' %}
+        <a class="secondary buttonlink" href="{{ url_for('logs') }}">Audit Logs</a>
+        {% endif %}
+    </div>
+</div>
+
+{% if current_user.role == 'admin' %}
+<div class="card">
+    <h2>Recent Activity</h2>
+    {% if logs %}
+    <div class="tablewrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time (UTC)</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in logs %}
+                <tr>
+                    <td>{{ row.created_at }}</td>
+                    <td>{{ row.username }}</td>
+                    <td>{{ row.action }}</td>
+                    <td>{{ row.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="muted">No activity recorded yet.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

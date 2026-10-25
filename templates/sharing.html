@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Manage access · TrustVault{% endblock %}
+{% block content %}
+<div class="pagehead"><div><p class="eyebrow">DOCUMENT PERMISSIONS</p><h1>Manage access</h1><p class="muted">Grant or revoke access to <strong>{{ document.title }}</strong>.</p></div><a class="secondary buttonlink" href="{{ url_for('documents') }}">Back to documents</a></div>
+<div class="card formcard">
+  <h2>Grant or update access</h2>
+  <form method="post" class="stack-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="action" value="grant">
+    <label>Existing user's username<input name="username" required maxlength="50" placeholder="Enter exact username"></label>
+    <label>Permission<select name="permission"><option value="read">Read — view and download</option><option value="edit">Edit — read and edit permission level</option></select></label>
+    <button class="primary" type="submit">Grant access</button>
+  </form>
+</div>
+<div class="card"><h2>Current access</h2>
+{% if shares %}<div class="tablewrap"><table><thead><tr><th>Username</th><th>Email</th><th>Permission</th><th>Granted</th><th>Action</th></tr></thead><tbody>
+{% for share in shares %}<tr><td>{{ share.username }}</td><td>{{ share.email }}</td><td>{{ share.permission|title }}</td><td>{{ share.created_at[:10] }}</td><td><form method="post" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="action" value="revoke"><input type="hidden" name="username" value="{{ share.username }}"><button class="quiet" type="submit">Revoke</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="muted">No users have been granted access yet.</p>{% endif %}
+</div>
+{% endblock %}
